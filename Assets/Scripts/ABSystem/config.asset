@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 1
+  m_Script: {fileID: 11500000, guid: afe5e151a2a6cfc4aa7bc78772347cfc, type: 3}
+  m_Name: config
+  m_EditorClassIdentifier: 
+  depInfoFileFormat: 0
+  m_BuildTarget: 5
+  m_Compression: 2
+  m_CompressionValues: 000000000100000002000000
+  m_CompressionOptions:
+  - m_Text: No Compression
+    m_Image: {fileID: 0}
+    m_Tooltip: 
+  - m_Text: Standard Compression (LZMA)
+    m_Image: {fileID: 0}
+    m_Tooltip: 
+  - m_Text: Chunk Based Compression (LZ4)
+    m_Image: {fileID: 0}
+    m_Tooltip: 
+  filters:
+  - valid: 1
+    path: Assets/Prefabs
+    filter: '*.prefab'
+  - valid: 1
+    path: Assets/Scene
+    filter: '*.unity'

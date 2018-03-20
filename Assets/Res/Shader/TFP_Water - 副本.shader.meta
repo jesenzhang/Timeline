@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 73c4de8cb7a00bc428bde37196582646
+timeCreated: 1514201838
+licenseType: Pro
+ShaderImporter:
+  defaultTextures:
+  - _Water01: {fileID: 2800000, guid: 90ff426733b42774fa4fb464cc68b2c9, type: 3}
+  - _Water02: {fileID: 2800000, guid: e13418555c7b85443a784514bbec2574, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
