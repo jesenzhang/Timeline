@@ -1,16 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
+using System;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
 
-public class AnimatorControlClip : MonoBehaviour {
+[Serializable]
+public class AnimatorControlClip : PlayableAsset, ITimelineClipAsset
+{
+    public AnimatorControlBehavior template = new AnimatorControlBehavior();
+    public string ClipName;
+    public ClipCaps clipCaps
+    {
+        get { return ClipCaps.Blending; }
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
+    {
+        var playable = ScriptPlayable<AnimatorControlBehavior>.Create(graph, template);
+        AnimatorControlBehavior clone = playable.GetBehaviour();
+       // template = clone;
+        return playable;
+    }
 }
