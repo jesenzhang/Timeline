@@ -79,9 +79,9 @@ public class TimelineDataEditor : Editor
             CinemachineBrain cina = (CinemachineBrain)a;
             obj = cina.gameObject;
         }
-        else if (a is MonoBehaviour)
+        else if (a is Component)
         {
-            MonoBehaviour cina = (MonoBehaviour)a;
+            Component cina = (Component)a;
             obj = cina.gameObject;
         }
         return obj;
@@ -180,14 +180,21 @@ public class TimelineDataEditor : Editor
 
         foreach (var at in timelineAsset.GetOutputTracks())
         {
-            ReplaceInfo info = replaceDict[at.name];
-            foreach (var clip in at.GetClips())
+            if (at is AnimatorControlTrack)
             {
-                if (clip.animationClip)
+                foreach (var clip in at.GetClips())
                 {
-                    Debug.Log(clip.animationClip.name);
+                    AnimatorControlClip mouthClip = clip.asset as AnimatorControlClip;
+                    // the template variable comes from classes made with the playable wizard
+                    AnimatorControlBehavior behaviour = mouthClip.template;
+                    behaviour.Clip = null;
+                    behaviour.animator = null;
+                    mouthClip.template.Clip = null;
+                    mouthClip.template.animator = null;
                 }
             }
+            ReplaceInfo info = replaceDict[at.name];
+           
         }
         foreach (var obj in replaceDict)
         {
