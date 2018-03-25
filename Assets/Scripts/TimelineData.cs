@@ -13,12 +13,13 @@ public class TimelineData : MonoBehaviour {
     PlayableDirector director;
     [SerializeField]
     public SerializableDictionaryReplaceInfo replaceDict = new SerializableDictionaryReplaceInfo();
-    public Dictionary<string, Object> ObjectDict = new Dictionary<string, Object>();
+    public Dictionary<string, Object> ObjectDict = new Dictionary<string, Object>();//资源名 -- 对象
 
     public PlayableDirector Director
     {
         get
         {
+
             if (director == null)
             {
                 director = GetComponent<PlayableDirector>();
@@ -31,47 +32,113 @@ public class TimelineData : MonoBehaviour {
             director = value;
         }
     }
-    public IEnumerator LoadRes()
+
+    public void ResetData()
     {
-        yield return new WaitForEndOfFrame(); 
+        ObjectDict.Clear();
     }
 
-    public void ReplaceObj(string key ,Object obj)
+    //得到加载资源列表
+    public string[] GetResourceList()
     {
-       
+        List<string> list = new List<string>();
         foreach (KeyValuePair<string, ReplaceInfo> kvp in replaceDict)
         {
-            ReplaceInfo info = kvp.Value;
-            if (!ObjectDict.ContainsKey(kvp.Key))
+            if (kvp.Value.isReplace && !list.Contains(kvp.Value.res))
             {
-                ObjectDict.Add(kvp.Key, null);
+                list.Add(kvp.Value.res);
             }
-            if (info.dependence == null || info.dependence.Length==0)
+        }
+        return list.ToArray();
+    }
+
+    //设置资源对象
+    public void SetResourceObj(string key,Object obj)
+    {
+        if (ObjectDict.ContainsKey(key))
+        {
+            ObjectDict[key] = obj;
+        }
+        else {
+            ObjectDict.Add(key, obj);
+        }
+    }
+ 
+    //绑定对象
+    public void ReBindObjs()
+    {
+        foreach (var att in Director.playableAsset.outputs)
+        {
+            if (replaceDict.ContainsKey(att.streamName))
             {
-                if (info.isAnimator && !string.IsNullOrEmpty(info.controller))
+                string objkey = replaceDict[att.streamName].res;
+                if (ObjectDict.ContainsKey(objkey))
                 {
-                    
+                    Object obj = ObjectDict[objkey];
+                    Director.SetGenericBinding(att.sourceObject, obj);
                 }
             }
         }
-        var timelineAsset = Director.playableAsset as TimelineAsset;
-        foreach (var at in timelineAsset.GetOutputTracks())
+    }
+    //替换对象
+    public void ReplaceObjs()
+    {
+        foreach (var att in Director.playableAsset.outputs)
         {
-            foreach (var att in Director.playableAsset.outputs)
+            if (replaceDict.ContainsKey(att.streamName))
             {
-                Director.SetGenericBinding(att.sourceObject, null);
+                ReplaceObj(att.streamName);
             }
         }
-         
     }
 
-    void Start()
+    public void ReplaceObj(string key)
     {
-       
-    }
+        if (!replaceDict.ContainsKey(key))
+            return;
+        ReplaceInfo info = replaceDict[key];
+        if (!info.isReplace)
+            return;
+        Transform objt = transform.Find(info.path);
+        if (objt != null)
+        {
+            return;
+        }
+        GameObject obj = (GameObject)ObjectDict[info.res];
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+        if (info.dependence == null || info.dependence.Length == 0)
+        {
+            if (info.parentPath.Length > 0)
+            {
+                Transform parent = transform.Find(info.parentPath);
+                obj.transform.SetParent(parent);
+            }
+            else
+            {
+                obj.transform.SetParent(transform);
+            }
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localRotation = Quaternion.identity;
+            obj.transform.localScale = Vector3.one;
+        }
+        else
+        {
+            Transform parent = transform.Find(info.parentPath);
+            if (parent != null)
+            {
+                obj.transform.SetParent(parent);
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localRotation = Quaternion.identity;
+                obj.transform.localScale = Vector3.one;
+            }
+            else
+            {
+                for (int i = 0; i < info.dependence.Length; i++)
+                {
+                    string ckey = info.dependence[i];
+                    ReplaceObj(ckey);
+                }
+            }
+        }
+    }
 }

@@ -10,10 +10,21 @@ public class AnimatorControlMixerBehaviour : PlayableBehaviour
 {
     private PlayableGraph playableGraph;
     private AnimationMixerPlayable mixer;
+    Animator animator = null;
     private List<AnimationClipPlayable> clips = new List<AnimationClipPlayable>();
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        Animator animator = playerData as Animator;
+        if (animator == null)
+        {
+            if (playerData is GameObject)
+            {
+                animator = ((GameObject)playerData).GetComponent<Animator>();
+            }
+            else if (playerData is Animator)
+            {
+                animator = playerData as Animator;
+            }
+        }
 
         if (animator == null)
             return;

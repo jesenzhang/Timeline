@@ -11,6 +11,7 @@ public class ReplaceInfo
     public int index;
     public string res;
     public string path;
+    public string parentPath;
     public bool isAnimator;
     public bool isReplace;
     public string controller;

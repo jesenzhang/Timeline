@@ -26,6 +26,7 @@ public class TimelineDataEditor : Editor
         DrawReplay();
     }
 
+    //得到节点的路径
     public void GetNodePath(Transform trans, ref string path)
     {
         if (path == "")
@@ -42,7 +43,7 @@ public class TimelineDataEditor : Editor
             GetNodePath(trans.parent, ref path);
         }
     }
-
+    //获取对象的依赖关系
     public void GetReferInfo(GameObject obj, ref ReplaceInfo info)
     {
         Transform trans = obj.transform;
@@ -60,7 +61,7 @@ public class TimelineDataEditor : Editor
         }
     }
 
-
+    //得到轨道绑定对象的GameObject
     public GameObject GetObj(PlayableDirector Director,UnityEngine.Object sourceObject)
     {
         GameObject obj = null;
@@ -141,6 +142,13 @@ public class TimelineDataEditor : Editor
                     GetNodePath(obj.transform, ref tpath);
                     info.res = obj.name;
                     info.path = tpath;
+                    string[] list = info.path.Split('/');
+                    int start = list[0].Length+1;
+                    int last = tpath.Length - list[list.Length - 1].Length;
+                    string objpath = info.path.Substring(start);
+                    info.parentPath = info.path.Substring(start, last - start-1);
+                    Debug.Log(info.parentPath +"  "+ objpath);
+                    info.path = objpath;
                     info.isReplace = false;
                     Animator animator = obj.GetComponent<Animator>();
                     if (animator)
@@ -217,6 +225,7 @@ public class TimelineDataEditor : Editor
             showData = !showData;
         }
     }
+    //导出资源
     public void ExportTimeline()
     {
         TimelineData data = (TimelineData)target;
@@ -236,10 +245,8 @@ public class TimelineDataEditor : Editor
             ReplaceInfo info = kvp.Value;
             if (info.isReplace && (info.dependence==null || info.dependence.Length == 0))
             {
-                int start = info.path.Split('/')[0].Length+1;
-                string objpath = info.path.Substring(start);
-                Debug.Log(" start " + start + " " + objpath);
-                Transform tt = obj.transform.Find(objpath);
+                Debug.Log(" info.path " + info.path);
+                Transform tt = obj.transform.Find(info.path);
                 if (tt != null)
                 {
                     GameObject.DestroyImmediate(tt.gameObject);
@@ -316,9 +323,11 @@ public class TimelineDataEditor : Editor
             }
             replaceDict[id].res = EditorGUI.TextField(new Rect(rect.x, rect.y+ EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "资源名称：", replaceDict[id].res);
             EditorGUI.TextField(new Rect(rect.x, rect.y+ 2*EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "路径：", replaceDict[id].path);
-            replaceDict[id].isReplace= EditorGUI.Toggle(new Rect(rect.x, rect.y + 3* EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "是否替换：", replaceDict[id].isReplace);
-            EditorGUI.Toggle(new Rect(rect.x, rect.y + 4 * EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "是否有动画：", replaceDict[id].isAnimator);
-            EditorGUI.TextField(new Rect(rect.x, rect.y + 5 * EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "动画控制器：", replaceDict[id].controller);
+            EditorGUI.TextField(new Rect(rect.x, rect.y + 3 * EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "父节点路径：", replaceDict[id].parentPath);
+
+            replaceDict[id].isReplace= EditorGUI.Toggle(new Rect(rect.x, rect.y + 4* EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "是否替换：", replaceDict[id].isReplace);
+            EditorGUI.Toggle(new Rect(rect.x, rect.y +5 * EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "是否有动画：", replaceDict[id].isAnimator);
+            EditorGUI.TextField(new Rect(rect.x, rect.y + 6 * EditorGUIUtility.singleLineHeight, rect.width, EditorGUIUtility.singleLineHeight), "动画控制器：", replaceDict[id].controller);
           
         };
         // 绘制表头
