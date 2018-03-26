@@ -83,7 +83,6 @@ public class AnimatorControlMixerBehaviour : PlayableBehaviour
     {
         base.OnGraphStart(playable);
         clips.Clear();
-        int inputCount = playable.GetInputCount();
     }
 
     public override void PrepareData(Playable playable, FrameData info)
@@ -97,37 +96,4 @@ public class AnimatorControlMixerBehaviour : PlayableBehaviour
             playableGraph.Destroy();
     }
 
-    static Quaternion AddQuaternions(Quaternion first, Quaternion second)
-    {
-        first.w += second.w;
-        first.x += second.x;
-        first.y += second.y;
-        first.z += second.z;
-        return first;
-    }
-
-    static Quaternion ScaleQuaternion(Quaternion rotation, float multiplier)
-    {
-        rotation.w *= multiplier;
-        rotation.x *= multiplier;
-        rotation.y *= multiplier;
-        rotation.z *= multiplier;
-        return rotation;
-    }
-
-    static float QuaternionMagnitude(Quaternion rotation)
-    {
-        return Mathf.Sqrt((Quaternion.Dot(rotation, rotation)));
-    }
-
-    static Quaternion NormalizeQuaternion(Quaternion rotation)
-    {
-        float magnitude = QuaternionMagnitude(rotation);
-
-        if (magnitude > 0f)
-            return ScaleQuaternion(rotation, 1f / magnitude);
-
-        Debug.LogWarning("Cannot normalize a quaternion with zero magnitude.");
-        return Quaternion.identity;
-    }
 }
