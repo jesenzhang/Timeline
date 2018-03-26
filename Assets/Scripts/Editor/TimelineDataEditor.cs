@@ -145,9 +145,14 @@ public class TimelineDataEditor : Editor
                     string[] list = info.path.Split('/');
                     int start = list[0].Length+1;
                     int last = tpath.Length - list[list.Length - 1].Length;
+                    Debug.Log(info.parentPath + "  " + start + " last" + last);
                     string objpath = info.path.Substring(start);
-                    info.parentPath = info.path.Substring(start, last - start-1);
-                    Debug.Log(info.parentPath +"  "+ objpath);
+                    if (last > start)
+                        info.parentPath = info.path.Substring(start, last - start - 1);
+                    else
+                        info.parentPath = "";
+
+
                     info.path = objpath;
                     info.isReplace = false;
                     Animator animator = obj.GetComponent<Animator>();
@@ -181,8 +186,11 @@ public class TimelineDataEditor : Editor
             if (replaceDict.ContainsKey(at.streamName))
             {
                 GameObject obj = GetObj(Director, at.sourceObject);
-                ReplaceInfo info = replaceDict[at.streamName];
-                GetReferInfo(obj, ref info);
+                if (obj)
+                {
+                    ReplaceInfo info = replaceDict[at.streamName];
+                    GetReferInfo(obj, ref info);
+                }
             }
         }
 
