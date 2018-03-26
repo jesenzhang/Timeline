@@ -17,6 +17,7 @@ MonoBehaviour:
   - {fileID: 114795241293514514}
   - {fileID: 114760746756454860}
   - {fileID: 114407123782438898}
+  - {fileID: 114132332719703294}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
@@ -285,6 +286,95 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: attackSkill_p1_all
     m_Version: 1
+--- !u!114 &114132332719703294
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f8bf3c7870e5184d9fb28539b73931d, type: 3}
+  m_Name: Particle System Control Track
+  m_EditorClassIdentifier: 
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_AnimClip: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Start: 0
+    m_ClipIn: 0
+    m_Asset: {fileID: 114199725075763052}
+    m_UnderlyingAsset: {fileID: 114199725075763052}
+    m_Duration: 2
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: 114132332719703294}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 2
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 2
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: TestTimeline
+    m_Version: 1
+--- !u!114 &114199725075763052
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c51b7c1d2e1d95842943def938fc9896, type: 3}
+  m_Name: ParticleSystemControlClip
+  m_EditorClassIdentifier: 
+  template:
+    inverseDuration: 0
 --- !u!114 &114253790784580078
 MonoBehaviour:
   m_ObjectHideFlags: 1
