@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   depInfoFileFormat: 1
   m_BuildTarget: 5
-  m_Compression: 1
+  m_Compression: 2
   m_CompressionValues: 000000000100000002000000
   m_CompressionOptions:
   - m_Text: No Compression
@@ -32,3 +32,15 @@ MonoBehaviour:
   - valid: 1
     path: Assets/Res/DataAsset/SystemData
     filter: '*.asset'
+  - valid: 1
+    path: Assets/Prefabs/Model
+    filter: '*.prefab'
+  - valid: 1
+    path: Assets/Res/DataAsset/card
+    filter: '*.asset'
+  - valid: 1
+    path: Assets/Res/DataAsset/NPC
+    filter: '*.asset'
+  - valid: 1
+    path: Assets/Prefabs/UI
+    filter: '*.prefab'
