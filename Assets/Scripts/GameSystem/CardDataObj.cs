@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class CardDataObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    Image face;
+    TextMeshProUGUI des;
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         SetDraggedPosition(eventData);
@@ -39,7 +43,27 @@ public class CardDataObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public int CardId = 0;
 
+    public void UpdateShow()
+    {
+        if (data==null)
+            return;
+        if (des)
+        {
+            des.text = data.Des;
+        }
+        if (face)
+        {
+            
+        }
+    }
+
     // Use this for initialization
+    private void Awake()
+    {
+        face = this.transform.Find("face").GetComponent<Image>();
+        des = this.transform.Find("des").GetComponent<TextMeshProUGUI>();
+    }
+
     void Start () {
 		
 	}

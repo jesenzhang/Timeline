@@ -22,9 +22,11 @@ public class UIRound : UIPage
     TextMeshProUGUI Label_Profit10;
     TextMeshProUGUI Label_Profit11;
 
-    TextMeshProUGUI Label_history;
+    Text Label_End;
 
     bool history_show = false;
+    bool turn_show = false;
+
 
     public UIRound() : base(UIType.Normal, UIMode.HideOther, UICollider.None)
     {
@@ -47,8 +49,7 @@ public class UIRound : UIPage
         Label_Profit01 = this.transform.Find("RuleTab/Profit/label_profit10").GetComponent<TextMeshProUGUI>();
         Label_Profit10 = this.transform.Find("RuleTab/Profit/label_profit01").GetComponent<TextMeshProUGUI>();
         Label_Profit11 = this.transform.Find("RuleTab/Profit/label_profit11").GetComponent<TextMeshProUGUI>();
-        Label_history = this.transform.Find("btn_history").GetComponent<TextMeshProUGUI>();
-
+        Label_End = this.transform.Find("btn_end/Text").GetComponent<Text>();
 
         this.transform.Find("btn_history").GetComponent<Button>().onClick.AddListener(() =>
         {
@@ -63,7 +64,30 @@ public class UIRound : UIPage
                 ClosePage<UIHistory>();
             }
         });
+
+        this.transform.Find("btn_end").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            if (turn_show)
+                return;
+            SetTurnBtn(turn_show);
+            RoundSystem.Instance.Turn();
+        });
     }
+
+    public void SetTurnBtn(bool playerturn)
+    {
+        if (playerturn == false)
+        {
+            turn_show = true;
+            Label_End.text = "对手回合";
+        }
+        else
+        {
+            turn_show = false;
+            Label_End.text = "结束回合";
+        }
+    }
+
 
     public override void Active()
     {

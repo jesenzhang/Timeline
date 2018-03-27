@@ -86,6 +86,7 @@ public class EntityCenter : MonoBehaviour {
         GameObject newcard = CardPool.Get();
         newcard.SetActive(true);
         newcard.GetComponent<CardDataObj>().data = (CardProperty)allcard[k].Clone();
+        newcard.GetComponent<CardDataObj>().UpdateShow();
         return newcard;
     }
 

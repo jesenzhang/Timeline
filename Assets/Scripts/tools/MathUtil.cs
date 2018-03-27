@@ -10,7 +10,7 @@ namespace VFrame.GameTools
         {
             long tick = DateTime.Now.Ticks;
             System.Random ran = new System.Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
-            return ran.Next(Min, Max);
+            return ran.Next(Min, Max+1);
         }
     }
 }

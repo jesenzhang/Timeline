@@ -16,7 +16,7 @@ public class UICardPad : UIPage
     float Height = 0;
 
 
-    public UICardPad() : base(UIType.PopUp, UIMode.DoNothing, UICollider.Normal)
+    public UICardPad() : base(UIType.Normal, UIMode.DoNothing, UICollider.Normal)
     {
 
     }
@@ -57,10 +57,21 @@ public class UICardPad : UIPage
         Vector2 pos =  RectTransformUtility.WorldToScreenPoint(Camera.main, card.transform.position);
         if (RectTransformUtility.RectangleContainsScreenPoint(UseCardRect, pos, Camera.main))
         {
-            Cards.Remove(card.gameObject);
-            RoundSystem.Instance.UseCard(card);
+            if (RoundSystem.Instance.UseCard(card))
+            {
+                Cards.Remove(card.gameObject);
+            }
         }
         SortCard();
+    }
+
+    public void ClearTable()
+    {
+        for (int i = 0; i < Cards.Count; i++)
+        {
+            EntityCenter.Instance.ReleaseCard(Cards[i].gameObject);
+        }
+        Cards.Clear();
     }
 
     public override void Refresh()

@@ -26,6 +26,10 @@ public class GameMain : MonoBehaviour {
         GameObject entityCenter = new GameObject("EntityCenter");
         entityCenter.AddComponent<EntityCenter>();
         entityCenter.transform.parent = this.transform;
+
+        GameObject caculateSystem = new GameObject("CaculateSystem");
+        entityCenter.AddComponent<CaculateSystem>();
+        entityCenter.transform.parent = this.transform;
     }
     
     private void Awake()
@@ -39,11 +43,11 @@ public class GameMain : MonoBehaviour {
 
         GameData.Instance.InitData();
         EntityCenter.Instance.InitData();
-        RoundSystem.Instance.LoadAsset(1);
-
-       // AssetBundleManager.Instance.Load("Assets.Prefabs.UI.Notice.prefab",(go)=> {
-       //     GameObject g = go.Instantiate();
-       // });
+      
+        // AssetBundleManager.Instance.Load("Assets.Prefabs.UI.Notice.prefab",(go)=> {
+        //     GameObject g = go.Instantiate();
+        // });
+        UIPage.ShowPage<UIMainPage>(null);
     }
     GameObject temp = null;
     // Update is called once per frame
@@ -51,14 +55,5 @@ public class GameMain : MonoBehaviour {
 
         RoundSystem.Instance.Tick(Time.deltaTime,Time.realtimeSinceStartup);
        
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            temp = EntityCenter.Instance.GetCard(1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            EntityCenter.Instance.ReleaseCard(temp);
-        }
     }
 }

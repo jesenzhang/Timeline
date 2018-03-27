@@ -11,14 +11,13 @@ public class UIMainPage : UIPage {
     }
 
     public override void Awake(GameObject go)
-    {
-        this.transform.Find("btn_skill").GetComponent<Button>().onClick.AddListener(() =>
-        {
-        });
+    { 
 
-        this.transform.Find("btn_battle").GetComponent<Button>().onClick.AddListener(() =>
+        this.transform.Find("Button").GetComponent<Button>().onClick.AddListener(() =>
         {
-            ShowPage<UIBattle>();
+            
+            RoundSystem.Instance.LoadAsset(1);
+
         });
     }
 
