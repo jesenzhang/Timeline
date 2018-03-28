@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Name: systemdata
   m_EditorClassIdentifier: 
   AllCards:
-  - {fileID: 11400000, guid: ef1e187d21c738e41bbaccc61915c6b1, type: 2}
+  - {fileID: 11400000, guid: c2ff7798ffe495349baf8ee468868cf4, type: 2}
   AllRounds:
+  - {fileID: 11400000, guid: 76ce4489e1c321f42b4cab74796e551a, type: 2}
   - {fileID: 11400000, guid: 6f8a2340a62e1f3459fa19b4c34a0e18, type: 2}
-  AllNPCs:
-  - {fileID: 11400000, guid: 6215a64612e522041ae785cc01607551, type: 2}
+  - {fileID: 11400000, guid: 6f8a2340a62e1f3459fa19b4c34a0e18, type: 2}
+  AllRoles:
+  - {fileID: 11400000, guid: 15c14b7abfb6574438879ad878e4024f, type: 2}
+  AllDecks:
+  - {fileID: 11400000, guid: 7f5b2a27c62c05243977a96014f7cd7a, type: 2}

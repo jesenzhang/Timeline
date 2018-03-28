@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ec96d5dda69ac846ae6fbb5a14d5814, type: 3}
-  m_Name: round1
+  m_Name: round0
   m_EditorClassIdentifier: 
   id: 0
   playerId: 0
@@ -24,13 +24,13 @@ MonoBehaviour:
   Rules:
   - -10<A<=B<5<C<D<20
   - -20<B<A<=D<20<C<40
-  Des: "\u8FD9\u662F\u4E00\u6B21\u5B9E\u529B\u76F8\u5F53\u7684\u5BF9\u5C40\uFF0CA\u516C\u53F8\u548C\u4F60\u6B63\u5728\u8FDB\u884C\u4E00\u573A\u8D44\u672C\u89D2\u529B\uFF0C\u9996\u5148\u5F97\u5230600\u91D1\u94B1\u7684\u4E00\u65B9\u5C06\u83B7\u5F97\u6536\u8D2D\u7279\u65AF\u62C9\u7684\u673A\u4F1A\u3002"
-  TargetDes: "\u5F97\u5230\u81F3\u5C119000\u91D1\u94B1"
+  Des: aaaaa
+  TargetDes: aaaaa
   Goals:
   - GoalType: 1
     Target: 1
     GoalCondition: 2
     Value: 600
-  title: Play/NPC
-  title0: "\u5356"
-  title1: "\u4E70"
+  title: aa
+  title0: 11
+  title1: 22

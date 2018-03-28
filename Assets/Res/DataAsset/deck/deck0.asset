@@ -8,15 +8,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed90f8d4ba28dc04888629f3e1f5bfda, type: 3}
-  m_Name: GainMoney100
+  m_Script: {fileID: 11500000, guid: 425e1ec3f80a56948a39123f64e6335c, type: 3}
+  m_Name: deck0
   m_EditorClassIdentifier: 
-  tid: 0
   id: 0
-  CardName: gain100M
-  Des: "\u589E\u52A0\u81EA\u5DF1100\u91D1\u94B1"
-  functions:
-  - type: 1
-    func: 1
-    target: 1
-    Values: 64000000
+  Deck: 000000000100000001000000010000000100000001000000000000000100000001000000010000000100000001000000
