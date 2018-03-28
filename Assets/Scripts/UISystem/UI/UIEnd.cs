@@ -25,11 +25,15 @@ public class UIEnd : UIPage
         {
             Finish();
         });
-
+        
+    }
+    public override void Active()
+    {
+        base.Active();
         bool show = (bool)data;
         ShowWin(show);
-
     }
+
     public void Finish()
     {
         win.SetActive(false);

@@ -30,9 +30,13 @@ public class RoundSystem : MonoBehaviour {
 
     RoundState state = RoundState.None;
     UICardPad cardpad = null;
-
-    public int MaxRound = 10;
+    
     public int CurrentRound = 0;
+    public int RemainRound {
+        get {
+          return roundData.maxRound - CurrentRound/2;
+        }
+    }
 
     //解析规则配置的临时数组
     private List<RoundGoalProfitItem> allPerseItem = new List<RoundGoalProfitItem>();
@@ -206,6 +210,26 @@ public class RoundSystem : MonoBehaviour {
         }
     }
 
+    object[] UIRoundData;
+
+ 
+    //加载数据
+    public void LoadAsset(int level)
+    {
+        DataReady = false;
+        if (level < GameData.Instance.SystemData.AllRounds.Length)
+        {
+            roundData = (RoundProperty)(GameData.Instance.SystemData.AllRounds[level]).Clone();
+            InitData();
+            DataReady = true;
+            UIRoundData = new object[4] { RoundSystem.Instance.roundData, RoundSystem.Instance.PlayerAtt.property, RoundSystem.Instance.NPCAtt.property, RoundSystem.Instance.RemainRound };
+            UIManager.Instance.ShowUI<UIRound>(null, UIRoundData);
+            UIManager.Instance.ShowUI<UICardPad>();
+            StartCoroutine(StartBattle());
+        }
+    }
+
+    //初始化数据
     public void InitData()
     {
         for (int i = 0; i < roundData.Rules.Length; i++)
@@ -213,51 +237,29 @@ public class RoundSystem : MonoBehaviour {
             PerseRule(ref allPerseItem, roundData.Rules[i]);
             FillProfit(ref roundData.Profit, ref allPerseItem);
         }
+        RoleProperty player = GameData.Instance.SystemData.AllRoles[roundData.playerId];
+        DeckProperty playerDeck = GameData.Instance.SystemData.AllDecks[player.DeckId];
         PlayerAtt = new RoleSystem
         {
-            property = new RoleProperty
-            {
-                Money = 100,
-                name = "Mick",
-                Amity = 60,
-                Honor = 55
-            }
-            
+            property = (RoleProperty)player.Clone(),
+            Deck = new List<int>(playerDeck.Deck),
         };
+        RoleProperty npc = GameData.Instance.SystemData.AllRoles[roundData.npcId];
+        DeckProperty npcdeck = GameData.Instance.SystemData.AllDecks[npc.DeckId];
         NPCAtt = new RoleSystem
         {
-            property = new RoleProperty
-            {
-                Money = 60,
-                name = "Jane",
-                Amity = 70,
-                Honor = 80
-            }
+            property = (RoleProperty)npc.Clone(),
+            Deck = new List<int>(npcdeck.Deck),
         };
-       
-
     }
 
-    public void LoadAsset(int level)
-    {
-        DataReady = false;
-        AssetBundleManager.Instance.Load("Assets.Res.DataAsset.round.round" + level + ".asset", (a) =>
-        {
-            roundData = (RoundProperty)((RoundProperty)a.mainObject).Clone();
-            InitData();
-            DataReady = true;
-            UIManager.Instance.ShowUI<UIRound>(null, roundData);
-            UIManager.Instance.ShowUI<UICardPad>();
-            StartCoroutine(StartBattle());
-        });
-    }
-
+    //开始
     public void BeginRound()
     {
         StartCoroutine(StartBattle());
     }
 
-
+    //开始
     public IEnumerator StartBattle()
     {
         yield return new WaitUntil(()=> { return DataReady; });
@@ -278,7 +280,7 @@ public class RoundSystem : MonoBehaviour {
         UIRound round = (UIRound)UIPage.GetPageInstatnce<UIRound>();
         round.SetTurnBtn(state == RoundState.PlayerRurn?true:false);
     }
-
+    //发牌
     public void DealCards()
     {
         if (state == RoundState.Begin)
@@ -292,22 +294,27 @@ public class RoundSystem : MonoBehaviour {
             {
                 int rn =  PlayerAtt.DealOneCard();
                 GameObject card = EntityCenter.Instance.GetCard(rn);
-                cardpad.Cards.Add(card);
-                NPCAtt.DealOneCard();
-            }        }
+                cardpad.AddCard(1,card);
+                int rnn = NPCAtt.DealOneCard();
+                GameObject card2 = EntityCenter.Instance.GetCard(rnn);
+                cardpad.AddCard(2, card2);
+            }
+        }
         else if (state == RoundState.PlayerRurn)
         {
             int rn = PlayerAtt.DealOneCard();
             GameObject card = EntityCenter.Instance.GetCard(rn);
-            cardpad.Cards.Add(card);
+            cardpad.AddCard(1,card);
         }
         else if (state == RoundState.NpcTurn)
         {
             int rn = NPCAtt.DealOneCard();
+            GameObject card = EntityCenter.Instance.GetCard(rn);
+            cardpad.AddCard(2, card);
         }
         cardpad.SortCard();
     }
-
+    //洁厕回合结束条件
     public int CheckRoundEnd()
     {
         int n = CheckMoneyAndAmity();
@@ -321,7 +328,7 @@ public class RoundSystem : MonoBehaviour {
             if (finish)
                 return 1;
             else {
-                if (CurrentRound >= MaxRound)
+                if (CurrentRound >= roundData.maxRound)
                 {
                     bool finish2 = CheckMostGoal();
                     if (finish2)
@@ -371,21 +378,47 @@ public class RoundSystem : MonoBehaviour {
         return 0;
     }
 
-    public bool UseCard(CardDataObj card)
+    //玩家使用卡牌
+    public bool UseCard(CardDataObj card,int role)
     {
-        if (state != RoundState.PlayerRurn)
+        if (role == 1 && state != RoundState.PlayerRurn)
+        {
             return false;
-
-        Debug.Log(card.data.CardName);
-        if (card.data.target == EnumProperty.TargetType.Self || card.data.target == EnumProperty.TargetType.All)
-        {
-            CaculateSystem.Instance.Caculate(card.data.type, card.data.func, ref PlayerAtt.property, card.data.Values);
         }
-        if (card.data.target == EnumProperty.TargetType.Enemy || card.data.target == EnumProperty.TargetType.All)
+        if (role == 2 && state != RoundState.NpcTurn)
         {
-            CaculateSystem.Instance.Caculate(card.data.type, card.data.func, ref NPCAtt.property, card.data.Values);
-        } 
+            return false;
+        }
+        RoleProperty self = null;
+        RoleProperty enemy = null;
+        if (state == RoundState.PlayerRurn)
+        {
+             self = PlayerAtt.property;
+             enemy = NPCAtt.property;
+        }
+        else if (state == RoundState.NpcTurn)
+        {
+             self = NPCAtt.property;
+             enemy = PlayerAtt.property;
+        }
+        Debug.Log(card.data.CardName);
+        for (int i = 0; i < card.data.functions.Length; i++)
+        {
+            FunctionData data = card.data.functions[i];
+            if (data.target == EnumProperty.TargetType.Self || data.target == EnumProperty.TargetType.All)
+            {
+                CaculateSystem.Instance.Caculate(data.type, data.func, ref self, data.Values);
+            }
+            if (data.target == EnumProperty.TargetType.Enemy || data.target == EnumProperty.TargetType.All)
+            {
+                CaculateSystem.Instance.Caculate(data.type, data.func, ref enemy, data.Values);
+            }
+        }
+       
         EntityCenter.Instance.ReleaseCard(card.gameObject);
+        UIRound round = (UIRound)UIPage.GetPageInstatnce<UIRound>();
+        UIRoundData[3] = RemainRound;
+        round.UpdateDataShow();
         return true;
     }
 
@@ -406,9 +439,10 @@ public class RoundSystem : MonoBehaviour {
         }
         UIRound round = (UIRound)UIPage.GetPageInstatnce<UIRound>();
         round.SetTurnBtn(turn);
-        if(CurrentRound<MaxRound)
+        if(CurrentRound< roundData.maxRound)
             CurrentRound ++;
-
+        UIRoundData[3] = RemainRound;
+        round.UpdateDataShow();
         DealCards();
     }
 

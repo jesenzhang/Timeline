@@ -64,6 +64,9 @@ public class RoundProperty : ScriptableObject ,ICloneable
     /// Profit[0] = 玩家0 NPC0   Profit[1] = 玩家0 NPC1   Profit[2] = 玩家1 NPC0   Profit[3] = 玩家1 NPC1 
     /// </summary>
     public int id = 0;
+    public int playerId = 0;
+    public int npcId = 0;
+    public int maxRound = 10;
     public Vector2[] Profit = new Vector2[4];
     public bool NeedPerse = true;
     public string[] Rules = new string[0];
@@ -84,6 +87,7 @@ public class RoundProperty : ScriptableObject ,ICloneable
             title = title,
             title0 = title0,
             title1 = title1,
+            maxRound = maxRound,
             TargetDes = TargetDes,
             Rules = (string[])Rules.Clone(),
             Goals = (RoundGoal[])Goals.Clone()

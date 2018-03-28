@@ -48,26 +48,20 @@ public class EntityCenter : MonoBehaviour {
 
     public void InitData()
     {
-        AssetBundleManager.Instance.Load("Assets.Prefabs.Model.Card.prefab", (go) => {
-          
-            CardPrefab = go.Instantiate();
-            CardPrefab.SetActive(false);
-            CardPool.prefab = CardPrefab;
-        });
+        if (CardPrefab == null)
+        {
+            AssetBundleManager.Instance.Load("Assets.Prefabs.Model.Card.prefab", (go) =>
+            {
+
+                CardPrefab = go.Instantiate();
+                CardPrefab.SetActive(false);
+                CardPool.prefab = CardPrefab;
+            });
+        }
     }
     CardProperty CloneCard(CardProperty old)
     {
-        CardProperty newcard = new CardProperty
-        {
-            CardName = old.CardName,
-            id = old.id,
-            Des = old.Des,
-            func = old.func,
-            target = old.target,
-            tid = old.tid,
-            type = old.type,
-            Values = (int[])old.Values.Clone()
-        };
+        CardProperty newcard = (CardProperty)old.Clone();
         return newcard;
     }
 

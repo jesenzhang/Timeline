@@ -12,5 +12,6 @@ public class SystemDataProperty : ScriptableObject
 {
     public CardProperty[] AllCards;
     public RoundProperty[] AllRounds;
-    public RoleProperty[] AllNPCs;
+    public RoleProperty[] AllRoles;
+    public DeckProperty[] AllDecks;
 }

@@ -25,7 +25,7 @@ public class CardDataObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         SetDraggedPosition(eventData);
         UICardPad cardpad = (UICardPad)UIManager.Instance.GetPageInstatnce<UICardPad>();
-        cardpad.UseCard(this);
+        cardpad.PlayerUseCard(this);
     }
 
     private void SetDraggedPosition(PointerEventData eventData)
@@ -64,12 +64,8 @@ public class CardDataObj : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         des = this.transform.Find("des").GetComponent<TextMeshProUGUI>();
     }
 
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void OnEnable()
+    {
+        UpdateShow();
+    }
 }
