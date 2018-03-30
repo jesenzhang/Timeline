@@ -27,20 +27,11 @@ MonoBehaviour:
     m_Tooltip: 
   filters:
   - valid: 1
-    path: Assets/Res/DataAsset/round
-    filter: '*.asset'
-  - valid: 1
     path: Assets/Res/DataAsset/SystemData
     filter: '*.asset'
   - valid: 1
     path: Assets/Prefabs/Model
     filter: '*.prefab'
-  - valid: 1
-    path: Assets/Res/DataAsset/card
-    filter: '*.asset'
-  - valid: 1
-    path: Assets/Res/DataAsset/NPC
-    filter: '*.asset'
   - valid: 1
     path: Assets/Prefabs/UI
     filter: '*.prefab'
