@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using TimelineTools;
 
 public class Loadassert : MonoBehaviour
 {
@@ -160,16 +161,16 @@ public class Loadassert : MonoBehaviour
         go.transform.localRotation = Quaternion.identity;
         go.transform.localScale = Vector3.one;
         TimelineData td = go.GetComponent<TimelineData>();
-            string[] slist = td.GetResourceList();
+            ReplaceInfo[] slist = td.GetResourceList();
             for (int i = 0; i < slist.Length; i++)
             {
-                if (slist[i] == player.name)
+                if (slist[i].res == player.name)
                 {
-                    td.SetResourceObj(slist[i], player);
+                    td.SetResourceObj(slist[i].path, player);
                 }
-                if (slist[i] == cube.name)
+                if (slist[i].res == cube.name)
                 {
-                    td.SetResourceObj(slist[i], cube);
+                    td.SetResourceObj(slist[i].path, cube);
                 }
             }
     }
