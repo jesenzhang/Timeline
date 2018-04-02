@@ -39,6 +39,10 @@ public class CameraEffectDrawer : PropertyDrawer
             CameraEffectTypes.InitData = true;
         }
 
+        if (cameraeffect.EffectType!=null)
+        {
+            cameraeffect.EffectObj = (MonoBehaviour)cameraeffect.camera.gameObject.GetComponent(cameraeffect.EffectType);
+        }
     
         int newselect = EditorGUILayout.Popup("Select Effect:", cameraeffect.EffectIndex, CameraEffectTypes.getEnums());
         if (cameraeffect.EffectIndex != newselect)
