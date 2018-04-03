@@ -13,7 +13,32 @@ public enum StepType
     None = 0,
     DoChoice = 1,
     UseCard = 2,
-    Think =3
+    Think =3,
+    Result = 4
+}
+public enum GameCardType
+{
+    None = 0,
+    Money = 1,
+    MoneyAndFriend = 2,
+    investigation =3
+}
+[Serializable]
+public class Card : ICloneable
+{
+    public GameCardType cardType = GameCardType.None;
+    public int id;
+    public int[] Values;
+    public object Clone()
+    {
+        Card outdata = new Card
+        {
+            cardType = cardType,
+            id = id,
+            Values = (int[])Values.Clone()
+        };
+        return outdata;
+    }
 }
 
 [Serializable]
@@ -48,7 +73,6 @@ public class RoundData : ICloneable
 [Serializable]
 public class LevelData : ICloneable
 {
-    public int totalRound = 0;
     public RoundData[] rounds;
    
 
@@ -76,17 +100,31 @@ public class GameRoundSystem : MonoBehaviour
     public LevelData levelData;
     public RoundProperty roundData;
     private bool DataReady = false;
-
-    RoundState state = RoundState.None;
-    UICardPad cardpad = null;
+     
 
     public int CurrentRound = 0;
+    public int  CurrentStep = 0;
+    public int CurrentLevel = 0;
+
+    public int MaxStep = 0;
+    public int MaxRound = 0;
+    public int MaxLevel = 0;
+
+    public int DoNum = 0;
+    public int UnDoNum = 0;
+    public int card1;
+    public int card2;
+    public int card3;
+    public int ChooseSide = 0;
+
+    public float friendly = 0;
+    public float Rate=0;
 
     public int RemainRound
     {
         get
         {
-            return levelData.totalRound - CurrentRound / 2;
+            return levelData.rounds.Length - CurrentRound;
         }
     }
 
@@ -264,6 +302,7 @@ public class GameRoundSystem : MonoBehaviour
 
     object[] UIRoundData;
 
+    public int NextActions = 0;
 
     //加载数据
     public void LoadAsset(int level)
@@ -277,9 +316,12 @@ public class GameRoundSystem : MonoBehaviour
 
         if (level < GameData.Instance.SystemData.AllLevels.Length)
         {
+           
             levelData = (LevelData)(GameData.Instance.SystemData.AllLevels[level]).Clone();
+            MaxRound = levelData.rounds.Length;
             InitData();
             DataReady = true;
+            UIRoundData = new object[3] { roundData, RemainRound,StepType.None };
             UIManager.Instance.ShowUI<UIGameRound>(null, UIRoundData);
             StartCoroutine(StartBattle());
         }
@@ -293,6 +335,7 @@ public class GameRoundSystem : MonoBehaviour
             PerseRule(ref allPerseItem, roundData.Rules[i]);
             FillProfit(ref roundData.Profit, ref allPerseItem);
         }
+        MaxLevel = GameData.Instance.SystemData.AllLevels.Length;
     }
 
     //开始
@@ -305,22 +348,200 @@ public class GameRoundSystem : MonoBehaviour
     public IEnumerator StartBattle()
     {
         yield return new WaitUntil(() => { return DataReady; });
-
-        state = RoundState.Begin;
+         
 
         yield return new WaitUntil(() => {
             return true;
         });
         CurrentRound = 0;
+        CurrentStep = 0;
+        InitStep();
     }
-   
-    //洁厕回合结束条件
-    public int CheckRoundEnd()
+
+    public float Friendly {
+        get {
+            if (DoNum + UnDoNum > 0)
+            {
+                float r = UnDoNum / (DoNum + UnDoNum);
+                if (r >= 0.6f)
+                {
+                    friendly = 0.6f * (2 - r);
+                }
+                else
+                {
+                    friendly = 0.6f * (1 - r);
+                }
+            }
+            return friendly;
+           
+        }
+    }
+
+    public int Hornor
     {
-        return 0;
+        get
+        {
+            return 50 - UnDoNum * 10 + DoNum * 5;
+        }
+    }
+
+    public float NPCRate {
+        get {
+            float a1 = roundData.Profit[0].x;
+            float b1 = roundData.Profit[1].x;
+            float c1 = roundData.Profit[2].x;
+            float d1 = roundData.Profit[3].x;
+            float p = (d1 - b1) / (a1 - b1 - c1 + d1)+Rate;
+            return p;
+        }
+    }
+    public float FinalNPCRate
+    {
+        get
+        {
+            float p = 0;
+            if (DoNum + UnDoNum > 0)
+            {
+                float r = UnDoNum / (DoNum + UnDoNum);
+                if (r >= 0.6f)
+                {
+                    p = NPCRate*Friendly;
+                }
+                else
+                {
+                    p = NPCRate * (1+Friendly);
+                }
+            }
+            return p;
+        }
+    }
+    public void UseCard(int card)
+    {
+        if (card == 1)
+        {
+            int money = GameData.Instance.SystemData.GameAllCards[card1].Values[0];
+        }
+        if (card == 2)
+        {
+            int money = GameData.Instance.SystemData.GameAllCards[card2].Values[0];
+            int friend = GameData.Instance.SystemData.GameAllCards[card2].Values[1];
+        }
+        if (card == 3)
+        {
+            int rate = GameData.Instance.SystemData.GameAllCards[card3].Values[0];
+        }
+
+        DoStep();
     }
     
+    public void Btn_PlayerClicked()
+    {
+        UseCard(1);
+    }
+    public void Btn_NPCClicked()
+    {
+        UseCard(2);
+    }
 
+    public void Btn_DoClicked()
+    {
+        DoNum++;
+        StartCoroutine(ShowResult(1));
+       
+    }
+    public void Btn_UnDoClicked()
+    {
+        UnDoNum++;
+        StartCoroutine(ShowResult(2));
+    }
+    public void Btn_UseCard1Clicked()
+    {
+         
+    }
+    public void Btn_UseCard2Clicked()
+    {
+        UIManager.Instance.ShowUI<UINotice>(()=> { UseCard(3); }, "这个NPC有"+NPCRate*100+"%概率选择合作！");
+    }
+    public void Btn_NextClicked()
+    {
+        DoStep();
+    }
+
+    public IEnumerator ShowResult(int type)
+    {
+        UIRoundData[2] = StepType.Result;
+        UIGameRound roundUI = (UIGameRound)UIManager.Instance.GetPageInstatnce<UIGameRound>();
+        roundUI.UpdateDataShow();
+        string show = type == 1 ? "结果公布：己方合作，对方不合作" : "结果公布：己方不合作，对方合作";
+        roundUI.SetResult(show, 1);
+        yield return new WaitForSeconds(3);
+        DoStep();
+    }
+
+    public void InitStep()
+    {
+        RoundStep step = levelData.rounds[CurrentRound].steps[CurrentStep];
+        UIRoundData[2] = step.stepType;
+        UIRoundData[1] = (object)RemainRound;
+        MaxStep = levelData.rounds[CurrentRound].steps.Length;
+        UIGameRound roundUI = (UIGameRound)UIManager.Instance.GetPageInstatnce<UIGameRound>();
+        if (step.stepType == StepType.Think)
+        {
+            roundUI.SetFriend("判定你的名誉值为"+Hornor, (int)FinalNPCRate * 100);
+        }
+        roundUI.UpdateDataShow();
+        if (step.stepType == StepType.UseCard)
+        {
+            NextActions = 2;
+            card1 = step.CardList[0];
+            card2 = step.CardList[1];
+            card3 = step.CardList[2];
+        }
+        else
+            NextActions = 1;
+
+    }
+    public void DoStep()
+    {
+        NextActions--;
+        CheckStep();
+    }
+
+    public void CheckStep()
+    {
+        if (NextActions <= 0)
+        {
+            CurrentStep++;
+            if (CurrentStep < MaxStep)
+            {
+                InitStep();
+            }
+        }
+        if (CurrentStep >= MaxStep)
+        {
+            CurrentStep = 0;
+            CurrentRound++;
+            if(CurrentRound < MaxRound)
+                InitStep();
+        }
+
+        if (CurrentRound >= MaxRound)
+        {
+            CurrentRound = 0;
+            EndLevel();
+        }
+
+    }
+
+    public void EndLevel()
+    {
+        CurrentLevel++;
+        if (CurrentLevel < MaxLevel)
+        {
+            LoadAsset(CurrentLevel);
+        }
+    }
+    
 
     public void ProcessCommand()
     {

@@ -15,4 +15,5 @@ public class SystemDataProperty : ScriptableObject
     public RoleProperty[] AllRoles;
     public DeckProperty[] AllDecks;
     public LevelData[] AllLevels;
+    public Card[] GameAllCards;
 }
