@@ -21,3 +21,46 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 15c14b7abfb6574438879ad878e4024f, type: 2}
   AllDecks:
   - {fileID: 11400000, guid: 7f5b2a27c62c05243977a96014f7cd7a, type: 2}
+  AllLevels:
+  - rounds:
+    - steps:
+      - stepType: 1
+        CardList: 
+    - steps:
+      - stepType: 2
+        CardList: 000000000100000002000000
+      - stepType: 1
+        CardList: 
+    - steps:
+      - stepType: 2
+        CardList: 000000000100000003000000
+      - stepType: 1
+        CardList: 
+  - rounds:
+    - steps:
+      - stepType: 1
+        CardList: 
+    - steps:
+      - stepType: 2
+        CardList: 000000000100000002000000
+      - stepType: 1
+        CardList: 
+  - rounds:
+    - steps:
+      - stepType: 3
+        CardList: 
+      - stepType: 1
+        CardList: 
+  GameAllCards:
+  - cardType: 1
+    id: 0
+    Values: 02000000
+  - cardType: 2
+    id: 1
+    Values: 0200000014000000
+  - cardType: 3
+    id: 2
+    Values: 1e000000
+  - cardType: 3
+    id: 3
+    Values: 5a000000
