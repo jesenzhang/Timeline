@@ -415,6 +415,11 @@ public class GameRoundSystem : MonoBehaviour
             return p;
         }
     }
+    public int EarnMoney(int type)
+    {
+        return (int)roundData.Profit[type - 1].x;
+    }
+
     public void UseCard(int card)
     {
         if (card == 1)
@@ -443,16 +448,41 @@ public class GameRoundSystem : MonoBehaviour
         UseCard(2);
     }
 
+    public int GetResult(bool playerchoose)
+    {
+        int resur = 1;
+        bool NpcChoose = false;
+        int p = MathUtil.GetRandom(1, 100);
+        if (p < NPCRate * 100)
+        {
+            NpcChoose = true;
+        }
+        else
+        {
+            NpcChoose = false;
+        }
+        if (playerchoose && NpcChoose)
+            resur = 1;
+        if (playerchoose && !NpcChoose)
+            resur = 2;
+        if (!playerchoose && NpcChoose)
+            resur = 3;
+        if (!playerchoose && !NpcChoose)
+            resur = 4;
+        return resur;
+    }
+
     public void Btn_DoClicked()
     {
         DoNum++;
-        StartCoroutine(ShowResult(1));
+       
+        StartCoroutine(ShowResult(GetResult(true)));
        
     }
     public void Btn_UnDoClicked()
     {
         UnDoNum++;
-        StartCoroutine(ShowResult(2));
+        StartCoroutine(ShowResult(GetResult(false)));
     }
     public void Btn_UseCard1Clicked()
     {
@@ -472,8 +502,8 @@ public class GameRoundSystem : MonoBehaviour
         UIRoundData[2] = StepType.Result;
         UIGameRound roundUI = (UIGameRound)UIManager.Instance.GetPageInstatnce<UIGameRound>();
         roundUI.UpdateDataShow();
-        string show = type == 1 ? "结果公布：己方合作，对方不合作" : "结果公布：己方不合作，对方合作";
-        roundUI.SetResult(show, 1);
+        string show = type == 1 ? "结果公布：己方合作，对方合作" : type == 2 ? "结果公布：己方合作，对方不合作":type ==3 ? "结果公布：己方不合作，对方合作" : "结果公布：己方不合作，对方不合作";
+        roundUI.SetResult(show, EarnMoney(type));
         yield return new WaitForSeconds(3);
         DoStep();
     }
