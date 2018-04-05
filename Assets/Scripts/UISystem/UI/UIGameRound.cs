@@ -162,7 +162,7 @@ public class UIGameRound : UIPage
     {
         object[] list = (object[])data;
         RoundProperty p = (RoundProperty)list[0];
-        Label_Level.SetText(StrOpe.i + "关卡：" + p.id.ToString());
+		Label_Level.SetText(StrOpe.i + "关卡：" + (int)list[3]);
         Label_Goal.SetText(StrOpe.i + "目标：" + p.TargetDes);
         Label_RoundNum.SetText(StrOpe.i + "剩余回合数：" + (int)list[1]);
         Label_Des.SetText(p.Des);

@@ -74,7 +74,7 @@ public class RoundData : ICloneable
 public class LevelData : ICloneable
 {
     public RoundData[] rounds;
-   
+	public int goal = 300;
 
     public object Clone()
     {
@@ -119,6 +119,10 @@ public class GameRoundSystem : MonoBehaviour
 
     public float friendly = 0;
     public float Rate=0;
+
+	public int Money=200;
+
+	public float ForceNPCRate = -1;
 
     public int RemainRound
     {
@@ -321,7 +325,7 @@ public class GameRoundSystem : MonoBehaviour
             MaxRound = levelData.rounds.Length;
             InitData();
             DataReady = true;
-            UIRoundData = new object[3] { roundData, RemainRound,StepType.None };
+			UIRoundData = new object[4] { roundData, RemainRound,StepType.None,level};
             UIManager.Instance.ShowUI<UIGameRound>(null, UIRoundData);
             StartCoroutine(StartBattle());
         }
@@ -387,6 +391,9 @@ public class GameRoundSystem : MonoBehaviour
 
     public float NPCRate {
         get {
+			if(ForceNPCRate>0)
+				return ForceNPCRate;
+			
             float a1 = roundData.Profit[0].x;
             float b1 = roundData.Profit[1].x;
             float c1 = roundData.Profit[2].x;
@@ -417,7 +424,8 @@ public class GameRoundSystem : MonoBehaviour
     }
     public int EarnMoney(int type)
     {
-        return (int)roundData.Profit[type - 1].x;
+		Money = Money+(int)roundData.Profit[type - 1].x;
+		return Money;
     }
 
     public void UseCard(int card)
@@ -433,7 +441,7 @@ public class GameRoundSystem : MonoBehaviour
         }
         if (card == 3)
         {
-            int rate = GameData.Instance.SystemData.GameAllCards[card3].Values[0];
+			
         }
 
         DoStep();
@@ -490,7 +498,10 @@ public class GameRoundSystem : MonoBehaviour
     }
     public void Btn_UseCard2Clicked()
     {
-        UIManager.Instance.ShowUI<UINotice>(()=> { UseCard(3); }, "这个NPC有"+NPCRate*100+"%概率选择合作！");
+		if(GameData.Instance.SystemData.GameAllCards[card3].Values.Length>0){
+			ForceNPCRate = ((float)GameData.Instance.SystemData.GameAllCards[card3].Values[0])/100f;
+		}
+		UIManager.Instance.ShowUI<UINotice>(()=> {UseCard(3); }, "这个NPC有"+NPCRate*100+"%概率选择合作！");
     }
     public void Btn_NextClicked()
     {
@@ -563,13 +574,49 @@ public class GameRoundSystem : MonoBehaviour
 
     }
 
+	public  void ResetData()
+	{
+		CurrentRound = 0;
+		CurrentStep = 0;
+		CurrentLevel = 0;
+		MaxStep = 0;
+		MaxRound = 0;
+		MaxLevel = 0;
+		DoNum = 0;
+		UnDoNum = 0;
+		card1=0;
+		card2=0;
+		card3=0;
+		ChooseSide = 0;
+		friendly = 0;
+		Rate=0;
+		Money=200;
+		ForceNPCRate=-1;
+	}
+
     public void EndLevel()
     {
         CurrentLevel++;
-        if (CurrentLevel < MaxLevel)
-        {
-            LoadAsset(CurrentLevel);
-        }
+       
+			if(Money>= levelData.goal)
+			{
+				if (CurrentLevel < MaxLevel)
+				{
+					LoadAsset(CurrentLevel);
+				}
+				else
+				{
+					UIManager.Instance.ShowUI<UINotice>(()=>{
+					ResetData();
+					LoadAsset(CurrentLevel);},"通关了！");
+				}
+			}else
+			{
+				UIManager.Instance.ShowUI<UINotice>(()=>{
+					ResetData();
+					LoadAsset(CurrentLevel);},"失败了！");
+
+			}
     }
     
 
