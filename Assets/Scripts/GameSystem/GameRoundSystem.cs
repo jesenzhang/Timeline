@@ -74,7 +74,7 @@ public class RoundData : ICloneable
 public class LevelData : ICloneable
 {
     public RoundData[] rounds;
-	public int goal = 300;
+	public int goal = 10;
 
     public object Clone()
     {
@@ -120,7 +120,7 @@ public class GameRoundSystem : MonoBehaviour
     public float friendly = 0;
     public float Rate=0;
 
-	public int Money=200;
+	public int Money=0;
 
 	public float ForceNPCRate = -1;
 
@@ -597,7 +597,7 @@ public class GameRoundSystem : MonoBehaviour
 		ChooseSide = 0;
 		friendly = 0;
 		Rate=0;
-		Money=200;
+		Money=0;
 		ForceNPCRate=-1;
 	}
 

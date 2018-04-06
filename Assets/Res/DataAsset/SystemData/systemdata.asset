@@ -36,7 +36,7 @@ MonoBehaviour:
         CardList: 000000000100000003000000
       - stepType: 1
         CardList: 
-    goal: 300
+    goal: 10
   - rounds:
     - steps:
       - stepType: 1
@@ -46,14 +46,14 @@ MonoBehaviour:
         CardList: 000000000100000002000000
       - stepType: 1
         CardList: 
-    goal: 300
+    goal: 10
   - rounds:
     - steps:
       - stepType: 3
         CardList: 
       - stepType: 1
         CardList: 
-    goal: 300
+    goal: 10
   GameAllCards:
   - cardType: 1
     id: 0
