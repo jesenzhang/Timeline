@@ -334,11 +334,14 @@ public class GameRoundSystem : MonoBehaviour
     //初始化数据
     public void InitData()
     {
+		if(roundData.NeedPerse)
+		{
         for (int i = 0; i < roundData.Rules.Length; i++)
         {
             PerseRule(ref allPerseItem, roundData.Rules[i]);
             FillProfit(ref roundData.Profit, ref allPerseItem);
-        }
+			}
+		}
         MaxLevel = GameData.Instance.SystemData.AllLevels.Length;
     }
 
