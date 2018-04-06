@@ -90,7 +90,8 @@ public class RoundProperty : ScriptableObject ,ICloneable
             maxRound = maxRound,
             TargetDes = TargetDes,
             Rules = (string[])Rules.Clone(),
-            Goals = (RoundGoal[])Goals.Clone()
+            Goals = (RoundGoal[])Goals.Clone(),
+			Profit = (Vector2[])Profit.Clone()
         };
         return outdata;
     }

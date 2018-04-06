@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ec96d5dda69ac846ae6fbb5a14d5814, type: 3}
-  m_Name: round1
+  m_Name: round3
   m_EditorClassIdentifier: 
   id: 0
   playerId: 0
@@ -17,15 +17,15 @@ MonoBehaviour:
   maxRound: 10
   Profit:
   - {x: 10, y: 10}
-  - {x: 5, y: 15}
-  - {x: 15, y: 5}
-  - {x: 0, y: 0}
+  - {x: -15, y: 15}
+  - {x: 15, y: -15}
+  - {x: 5, y: 5}
   NeedPerse: 1
   Rules:
   - -10<A<=B<5<C<D<20
   - -20<B<A<=D<20<C<40
-  Des: "\u8FD9\u662F\u4E00\u6B21\u5B9E\u529B\u76F8\u5F53\u7684\u5BF9\u5C40\uFF0CA\u516C\u53F8\u548C\u4F60\u6B63\u5728\u8FDB\u884C\u4E00\u573A\u8D44\u672C\u89D2\u529B\uFF0C\u9996\u5148\u5F97\u5230600\u91D1\u94B1\u7684\u4E00\u65B9\u5C06\u83B7\u5F97\u6536\u8D2D\u7279\u65AF\u62C9\u7684\u673A\u4F1A\u3002"
-  TargetDes: "\u81F3\u5C11\u8D62\u5F9710\u5757\u94B1"
+  Des: "\u60C5\u666F\u4E09\u5982\u4E0B\uFF1A"
+  TargetDes: "\u81F3\u5C11\u83B7\u5F9710\u5143"
   Goals:
   - GoalType: 1
     Target: 1

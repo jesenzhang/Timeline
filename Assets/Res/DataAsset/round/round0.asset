@@ -16,21 +16,21 @@ MonoBehaviour:
   npcId: 0
   maxRound: 10
   Profit:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  NeedPerse: 1
+  - {x: 10, y: 10}
+  - {x: -15, y: 15}
+  - {x: 15, y: -15}
+  - {x: 5, y: 5}
+  NeedPerse: 0
   Rules:
   - -10<A<=B<5<C<D<20
   - -20<B<A<=D<20<C<40
-  Des: aaaaa
-  TargetDes: aaaaa
+  Des: "\u5F53\u4E0B\u6709\u4E00\u4E2A\u6781\u597D\u7684\u5546\u673A\uFF0C\u4F46\u662F\u6709\u4EBA\u548C\u4F60\u4E00\u9F50\u53D1\u73B0\u4E86\u8FD9\u4E2A\u673A\u4F1A\u3002\u4F60\u9884\u4F30\u4E86\u76C8\u4E8F\u5982\u4E0B\uFF0C\u600E\u4E48\u529E"
+  TargetDes: "\u8D62\u5F97\u66F4\u591A\u7684\u94B1"
   Goals:
   - GoalType: 1
     Target: 1
     GoalCondition: 2
     Value: 600
-  title: aa
-  title0: 11
-  title1: 22
+  title: Player/NPC
+  title0: "\u5408\u4F5C"
+  title1: "\u6B3A\u9A97"
