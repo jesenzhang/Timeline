@@ -299,7 +299,6 @@ public class GameRoundSystem : MonoBehaviour
                 item.ProfitType = EnumProperty.RoundProfitType.Number;
                 item.RolePay = EnumProperty.RoundProfitRolePay.None;
                 item.Value = rnum;
-                Debug.Log("rnum " + rnum);
             }
         }
     }
@@ -367,19 +366,21 @@ public class GameRoundSystem : MonoBehaviour
 
     public float Friendly {
         get {
+			float f=0;
             if (DoNum + UnDoNum > 0)
             {
                 float r = UnDoNum / (DoNum + UnDoNum);
                 if (r >= 0.6f)
                 {
-                    friendly = 0.6f * (2 - r);
+                    f = 0.6f * (2 - r);
                 }
                 else
                 {
-                    friendly = 0.6f * (1 - r);
+                    f = 0.6f * (1 - r);
                 }
             }
-            return friendly;
+			f = f+friendly;
+            return f;
            
         }
     }
@@ -450,11 +451,13 @@ public class GameRoundSystem : MonoBehaviour
         if (card == 1)
         {
             int money = GameData.Instance.SystemData.GameAllCards[card1].Values[0];
+			Money=+money;
         }
         if (card == 2)
         {
             int money = GameData.Instance.SystemData.GameAllCards[card2].Values[0];
             int friend = GameData.Instance.SystemData.GameAllCards[card2].Values[1];
+			friendly+=(float)friend/100f;
         }
         if (card == 3)
         {
