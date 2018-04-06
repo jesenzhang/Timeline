@@ -402,6 +402,8 @@ public class GameRoundSystem : MonoBehaviour
             float c1 = roundData.Profit[2].x;
             float d1 = roundData.Profit[3].x;
             float p = (d1 - b1) / (a1 - b1 - c1 + d1)+Rate;
+			if(p>1)
+				p=1;
             return p;
         }
     }
@@ -422,6 +424,8 @@ public class GameRoundSystem : MonoBehaviour
                     p = NPCRate * (1+Friendly);
                 }
             }
+			if(p>1)
+				p=1;
             return p;
         }
     }
