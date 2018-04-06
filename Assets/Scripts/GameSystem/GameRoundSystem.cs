@@ -396,12 +396,22 @@ public class GameRoundSystem : MonoBehaviour
         get {
 			if(ForceNPCRate>0)
 				return ForceNPCRate;
-			
+			float a2 = roundData.Profit[0].y;
+			float b2 = roundData.Profit[1].y;
+			float c2 = roundData.Profit[2].y;
+			float d2 = roundData.Profit[3].y;
+			float p =0;
+			if((a2>b2 && c2>d2) ||(a2<b2 && c2<d2))
+			{
+				p=1;
+			}else{
+
             float a1 = roundData.Profit[0].x;
             float b1 = roundData.Profit[1].x;
             float c1 = roundData.Profit[2].x;
             float d1 = roundData.Profit[3].x;
-            float p = (d1 - b1) / (a1 - b1 - c1 + d1)+Rate;
+            p = (d1 - b1) / (a1 - b1 - c1 + d1)+Rate;
+			}
 			if(p>1)
 				p=1;
             return p;
