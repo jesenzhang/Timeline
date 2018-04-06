@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8ec96d5dda69ac846ae6fbb5a14d5814, type: 3}
-  m_Name: round3
+  m_Name: round2
   m_EditorClassIdentifier: 
-  id: 0
+  id: 2
   playerId: 0
   npcId: 0
   maxRound: 10
@@ -20,7 +20,7 @@ MonoBehaviour:
   - {x: -15, y: 15}
   - {x: 15, y: -15}
   - {x: 5, y: 5}
-  NeedPerse: 1
+  NeedPerse: 0
   Rules:
   - -10<A<=B<5<C<D<20
   - -20<B<A<=D<20<C<40
