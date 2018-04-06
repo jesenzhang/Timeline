@@ -63,7 +63,7 @@ MonoBehaviour:
     Values: 0200000014000000
   - cardType: 3
     id: 2
-    Values: 1e000000
+    Values: 
   - cardType: 3
     id: 3
     Values: 5a000000
