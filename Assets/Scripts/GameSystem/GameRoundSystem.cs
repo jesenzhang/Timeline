@@ -402,10 +402,14 @@ public class GameRoundSystem : MonoBehaviour
 			float c2 = roundData.Profit[2].y;
 			float d2 = roundData.Profit[3].y;
 			float p =0;
-			if((a2>b2 && c2>d2) ||(a2<b2 && c2<d2))
+			if(a2>b2 && c2>d2)
+			{
+				p=1;
+			}else if(a2<b2 && c2<d2)
 			{
 				p=0;
-			}else{
+			}else
+			{
 
             float a1 = roundData.Profit[0].x;
             float b1 = roundData.Profit[1].x;
