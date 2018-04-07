@@ -65,8 +65,8 @@ public class UIGameRound : UIPage
         Label_title4 = this.transform.Find("RuleTab/Profit/label_title4").GetComponent<TextMeshProUGUI>();
 
         Label_Profit00 = this.transform.Find("RuleTab/Profit/label_profit00").GetComponent<TextMeshProUGUI>();
-        Label_Profit01 = this.transform.Find("RuleTab/Profit/label_profit10").GetComponent<TextMeshProUGUI>();
-        Label_Profit10 = this.transform.Find("RuleTab/Profit/label_profit01").GetComponent<TextMeshProUGUI>();
+        Label_Profit01 = this.transform.Find("RuleTab/Profit/label_profit01").GetComponent<TextMeshProUGUI>();
+        Label_Profit10 = this.transform.Find("RuleTab/Profit/label_profit10").GetComponent<TextMeshProUGUI>();
         Label_Profit11 = this.transform.Find("RuleTab/Profit/label_profit11").GetComponent<TextMeshProUGUI>();
 
         label_Yourchoose = this.transform.Find("label_Yourchoose").GetComponent<TextMeshProUGUI>();
