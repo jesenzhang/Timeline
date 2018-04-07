@@ -139,7 +139,7 @@ public class UIGameRound : UIPage
     public void SetResult(string text,int num)
     {
         label_Result.text = text;
-        label_Earn.SetText("本回合您的收益是：" + num);
+        label_Earn.SetText("您的收益是：" + num);
     }
     public void SetFriend(string text, int num)
     {
