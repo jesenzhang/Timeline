@@ -455,7 +455,7 @@ public class GameRoundSystem : MonoBehaviour
         if (card == 1)
         {
             int money = GameData.Instance.SystemData.GameAllCards[card1].Values[0];
-			Money=+money;
+			Money+=money;
         }
         if (card == 2)
         {
@@ -626,7 +626,12 @@ public class GameRoundSystem : MonoBehaviour
 			{
 				if (CurrentLevel < MaxLevel)
 				{
-					LoadAsset(CurrentLevel);
+					UIManager.Instance.ShowUI<UINotice>(()=>{
+					friendly = 0;
+					Rate=0;
+					Money=0;
+					ForceNPCRate=-1;
+					LoadAsset(CurrentLevel);},"过关了！");
 				}
 				else
 				{
