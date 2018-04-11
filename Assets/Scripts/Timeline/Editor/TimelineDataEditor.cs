@@ -100,6 +100,25 @@ namespace TimelineTools
             replaceDict.Clear();
             referDict.Clear();
             replacebindingCount.Clear();
+            
+            SerializedObject serializedObject = new UnityEditor.SerializedObject(Director);
+
+            SerializedProperty m_SceneBindings = serializedObject.FindProperty("m_SceneBindings");
+
+            List<int> propertyArray = new List<int>();
+            for (int i = 0; i < m_SceneBindings.arraySize; i++)
+            {
+                SerializedProperty property = m_SceneBindings.GetArrayElementAtIndex(i);
+                if (property.FindPropertyRelative("key").objectReferenceValue == null)
+                {
+                    propertyArray.Add(i);
+                }
+            }
+            foreach (int property in propertyArray)
+            {
+                m_SceneBindings.DeleteArrayElementAtIndex(property);
+            }
+            serializedObject.ApplyModifiedProperties();
 
             var timelineAsset = Director.playableAsset as TimelineAsset;
             data.PlayAseetName = timelineAsset.name;
@@ -251,6 +270,7 @@ namespace TimelineTools
         {
             TimelineData data = (TimelineData)target;
             GameObject item = data.gameObject;
+
             // 创建一个新的对象用于导出
             GameObject obj = Instantiate(item) as GameObject;
             obj.name = item.name;
