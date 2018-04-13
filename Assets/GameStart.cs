@@ -31,7 +31,8 @@ public class GameStart : MonoBehaviour
     }
     // Use this for initialization
     void Start()
-    {
+    { 
+           
         InitSystems();
         GameData.Instance.InitData();
         StartCoroutine(StartBattle());
@@ -50,7 +51,6 @@ public class GameStart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         GameRoundSystem.Instance.Tick(Time.deltaTime, Time.realtimeSinceStartup);
 
     }
