@@ -14,6 +14,4 @@ public class SystemDataProperty : ScriptableObject
     public RoundProperty[] AllRounds;
     public RoleProperty[] AllRoles;
     public DeckProperty[] AllDecks;
-    public LevelData[] AllLevels;
-    public Card[] GameAllCards;
 }
