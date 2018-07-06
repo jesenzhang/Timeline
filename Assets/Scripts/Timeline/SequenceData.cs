@@ -1,16 +1,23 @@
-﻿using System;
+﻿
+#define LUACOMPILE
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-//using GameBase;
+
+#if LUACOMPILE
+using GameBase;
+using LuaInterface;
+#endif
 
 namespace TimelineTools
 {
 
     public class SequenceEventArgs : EventArgs
     {
+        public GameObject[] objs;
         public string msg;
         public int param;
         public string[] paramlist;
@@ -23,6 +30,12 @@ namespace TimelineTools
             param = param0;
         }
 
+        public SequenceEventArgs(string msg0, string[] param0, GameObject[] objs0)
+        {
+            msg = msg0;
+            paramlist = param0;
+            objs = objs0;
+        }
         public SequenceEventArgs(string msg0, string[] param0)
         {
             msg = msg0;
@@ -41,6 +54,8 @@ namespace TimelineTools
         public event SequenceHandler SequenceFinished;
         public event SequenceHandler OnMessageEvent;
 
+        double localTime = 0;
+        bool countTime = false;
         public PlayableDirector Director
         {
             get
@@ -86,6 +101,7 @@ namespace TimelineTools
         public void SetCurrentTime(float t)
         {
             Director.time = t;
+            localTime = t;
         }
 
         public float RunningTime()
@@ -99,29 +115,36 @@ namespace TimelineTools
         {
             if (Director == null) return;
             Director.Stop();
+            countTime = false;
+            localTime = 0;
         }
 
         public void Play()
         {
             if (Director == null) return;
             Director.Play();
+            countTime= true;
         }
 
         public void Pause()
         {
             if (Director == null) return;
+            countTime = false;
             Director.Pause();
+           
         }
 
         public void Resume()
         {
             if (Director == null) return;
+            countTime = true;
             Director.Resume();
         }
         public void Skip()
         {
             if (Director == null) return;
             Director.time = Director.duration;
+            localTime = Director.duration;
         }
 
 
@@ -141,6 +164,15 @@ namespace TimelineTools
                 OnMessageEvent(this, args);
             }
         }
+        
+        public void OnMessage(string msg, string[] param,GameObject[] objs)
+        {
+            if (OnMessageEvent != null)
+            {
+                SequenceEventArgs args = new SequenceEventArgs(msg, param, objs);
+                OnMessageEvent(this, args);
+            }
+        }
 
         public void OnMessage(string msg, string[] param)
         {
@@ -155,31 +187,31 @@ namespace TimelineTools
         {
             if (Director == null)
                 return;
-           /* //绑定lua函数
+#if LUACOMPILE
             LuaInterface.LuaFunction func = LuaManager.GetFunction("SequenceCall.OnFinished");
             string name = this.gameObject.name;
             int index = name.IndexOf("(");
             if (index >= 0)
                 name = name.Substring(0, index);
             LuaManager.CallFunc_VX(func, name);
-            */
+# endif
         }
 
-
+     
         void OnMessage(object sender, SequenceEventArgs arg)
         {
             if (Director == null)
                 return;
-            /* //绑定lua函数
-           LuaInterface.LuaFunction func = LuaManager.GetFunction("SequenceCall.OnMessage");
-           string name = this.gameObject.name;
-           int index = name.IndexOf("(");
-           if (index >= 0)
-               name = name.Substring(0, index);
-           LuaManager.CallFunc_VX(func, arg.msg, arg.param, arg.paramlist);
-           */
+#if LUACOMPILE
+            LuaInterface.LuaFunction func = LuaManager.GetFunction("SequenceCall.OnMessage");
+            string name = this.gameObject.name;
+            int index = name.IndexOf("(");
+            if (index >= 0)
+                name = name.Substring(0, index);
+            LuaManager.CallFunc_VX(func, arg.msg, arg.param, arg.paramlist,arg.objs);
+#endif
         }
-
+     
         void Awake()
         {
             if (Director)
@@ -187,7 +219,7 @@ namespace TimelineTools
                 SequenceFinished += OnCuteSceneFinished;
                 OnMessageEvent += OnMessage;
             }
-
+            
 
         }
         // Use this for initialization
@@ -200,10 +232,13 @@ namespace TimelineTools
         void Update()
         {
             //if (Director && Director.state == PlayState.Playing)
+            if(countTime)
             {
-                double f = Director.duration - Director.time;
+                localTime += Time.deltaTime;
+                //double f = Director.duration - Director.time;
                 // Debug.Log("Director.time " + f );
-                if (f < 0.015f)
+                //if (f < 0.030f)
+                if (localTime >= Director.duration)
                 {
                     Debug.Log("Finish");
                     if (SequenceFinished != null)
